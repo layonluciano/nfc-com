@@ -5,4 +5,11 @@
   <version>0.0.1-SNAPSHOT</version>
   <name>NFC Communication</name>
   <description>Biblioteca para leitura de tags NFC </description>
+  <dependencies>
+  	<dependency>
+  		<groupId>com.sun.jersey</groupId>
+  		<artifactId>jersey-client</artifactId>
+  		<version>1.8</version>
+  	</dependency>
+  </dependencies>
 </project>
