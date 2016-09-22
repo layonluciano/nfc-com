@@ -1,4 +1,5 @@
 package lasse.nfccom;
+
 import javax.smartcardio.ATR;
 import javax.smartcardio.Card;
 import javax.smartcardio.CardChannel;
@@ -11,6 +12,7 @@ import javax.smartcardio.ResponseAPDU;
  * @author layonluciano
  * This class is used to manage commands to be sent to Smart Cards
  */
+@SuppressWarnings("restriction")
 public class SmartCardHandler {
 	
 	String cardUID;
@@ -33,6 +35,7 @@ public class SmartCardHandler {
 	 * @return SmartCard 	the card read by the terminal reader
 	 * @throws InterruptedException
 	 */
+	@SuppressWarnings("finally")
 	public SmartCard getCardData(CardTerminal cardTerminal) throws InterruptedException{
 		Card card;
 		try{
@@ -56,10 +59,12 @@ public class SmartCardHandler {
 			cardATR = convertToString(atrBytes);
 			
 		}catch(CardException e){
-			e.printStackTrace();
-			return null;
+			System.out.println("Card object can't be created due to Smart Card Reader connection failure.");
+			System.out.println("Cause: "+ e.getCause().toString());
 		}
-		return new SmartCard(cardUID,cardATR);
+		finally{
+			return new SmartCard(cardUID,cardATR);
+		}
 	}
 	
 	
