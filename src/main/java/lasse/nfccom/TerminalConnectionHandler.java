@@ -38,7 +38,7 @@ public class TerminalConnectionHandler {
 			System.out.println("NFC Terminal detected!");
 			
 		}catch (CardException e) {
-			System.out.println("Error in stablish a connection to a Smart Card Reader.");
+			System.out.println("Error in establish a connection to a Smart Card Reader.");
 			System.out.println("Cause: "+ e.getCause().toString());	
 		}finally{
 			return cardTerminal;
