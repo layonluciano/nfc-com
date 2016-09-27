@@ -12,7 +12,6 @@ import javax.smartcardio.ResponseAPDU;
  * @author layonluciano
  * This class is used to manage commands to be sent to Smart Cards
  */
-@SuppressWarnings("restriction")
 public class SmartCardHandler {
 	
 	String cardUID;
@@ -34,9 +33,9 @@ public class SmartCardHandler {
 	 * @param cardTerminal 	an instance of the terminal reader
 	 * @return SmartCard 	the card read by the terminal reader
 	 * @throws InterruptedException
+	 * @throws SmartCardNullValueAssociatedException 
 	 */
-	@SuppressWarnings("finally")
-	public SmartCard getCardData(CardTerminal cardTerminal) throws InterruptedException{
+	public SmartCard getCardData(CardTerminal cardTerminal) throws InterruptedException, SmartCardNullValueAssociatedException{
 		Card card;
 		try{
 			//Connects using any available protocol
@@ -59,12 +58,11 @@ public class SmartCardHandler {
 			cardATR = convertToString(atrBytes);
 			
 		}catch(CardException e){
-			System.out.println("Card object can't be created due to Smart Card Reader connection failure.");
-			System.out.println("Cause: "+ e.getCause().toString());
+			throw new SmartCardNullValueAssociatedException("Terminal Read wasn't able to get a response from Smart Card. Null value associated");
 		}
-		finally{
-			return new SmartCard(cardUID,cardATR);
-		}
+		
+		return new SmartCard(cardUID,cardATR);
+		
 	}
 	
 	
