@@ -22,6 +22,10 @@ public class SmartCard {
 		this.atr = atr;
 	}
 	
+	public SmartCard(){
+		
+	}
+	
 	public String getUid() {
 		return uid;
 	}

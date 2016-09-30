@@ -28,6 +28,23 @@ public class SmartCardHandler {
 	static byte[] getUIDCommand = new byte[] { (byte) 0xFF, (byte) 0xCA, (byte) 0x00,
             (byte) 0x00, (byte) 0x00 };
 	
+	static byte[] getSerialNumberCommand = new byte[] {(byte) 0xFF, (byte) 0xCA, (byte) 0x00,
+            (byte) 0x00, (byte) 0x04 };
+	
+	static byte[] getFirmwareVersionCommand = new byte[] { (byte) 0xFF, (byte) 0x00, (byte) 0x48,
+            (byte) 0x00, (byte) 0x00 };
+	
+	static byte[] setBuzzerOnCommand = new byte[] { (byte) 0xFF, (byte) 0x00, (byte) 0x52,
+            (byte) 0xFF, (byte) 0x00 };
+	
+	static byte[] setBuzzerOffCommand = new byte[] { (byte) 0xFF, (byte) 0x00, (byte) 0x52,
+            (byte) 0x00, (byte) 0x00 };
+	
+	static byte[] readBinaryBlockCommand = new byte[] { (byte) 0xFF, (byte) 0xB0, (byte) 0x00,
+            (byte) 0x04, (byte) 0x10 };
+	
+	static byte[] authenticationCommand = new byte[] { (byte) 0xFF, (byte) 0x86, (byte) 0x00,
+            (byte) 0x00, (byte) 0x05, (byte) 0x01, (byte) 0x00, (byte) 0x04, (byte) 0x60, (byte) 0x00 };
 	/**
 	 * This method is responsible to retrieve a UID regarding a Smart card 
 	 * @param cardTerminal 	an instance of the terminal reader
