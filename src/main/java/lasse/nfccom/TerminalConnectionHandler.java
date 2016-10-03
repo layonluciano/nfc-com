@@ -1,46 +1,63 @@
 package lasse.nfccom;
-import java.util.List;
+
 import javax.smartcardio.CardException;
 import javax.smartcardio.CardTerminal;
 import javax.smartcardio.TerminalFactory;
+import java.util.List;
+
+import static java.text.MessageFormat.format;
 
 /**
- * 
+ * This class is used to manage connections to the Terminal Reader
+ *
+ * @author Anderson Rodrigo Davi
  * @author layonluciano
- * This class is used to manage connections to the Terminal Reader 
  */
 public class TerminalConnectionHandler {
-	
-	TerminalFactory factory;
-	List<CardTerminal> terminalsList;
-	CardTerminal cardTerminal;
-	
-	public TerminalConnectionHandler(){
-		this.factory = null;
-		this.terminalsList = null;
-		this.cardTerminal = null;
+
+	private static final String NONE_TYPE = "None";
+
+	private TerminalFactory factory;
+
+	public TerminalConnectionHandler() {
+		this(TerminalFactory.getDefault());
 	}
-	
+
+	public TerminalConnectionHandler(TerminalFactory terminalFactory) {
+		this.factory = terminalFactory;
+	}
+
 	/**
 	 * This method is used to establish a connection with the Terminal reader
-	 * @return CardTerminal		card terminal used to read card tags
+	 * @return the CardTerminal object used to read card tags
 	 */
-	public CardTerminal getTerminalConnection() throws TerminalReaderNotFoundException{
-		
-		try{
-			factory = TerminalFactory.getDefault();
-					
-			//Returns a list containing all available Terminal readers
-			terminalsList = factory.terminals().list();	
-					
-			cardTerminal = terminalsList.get(0);
-			System.out.println("NFC Terminal detected!");
-					
-			}catch (CardException e) {
-				throw new TerminalReaderNotFoundException("Error in establish a connection to a Smart Card Reader.");
+	public CardTerminal getTerminalConnection() throws TerminalReaderNotFoundException {
+
+		if (NONE_TYPE.equals(factory.getType())) {
+			throw new TerminalCardDriversNotAvailableException("No drivers available. Check if de library libpcsclite.so.1 is loaded.");
+		}
+
+		System.out.println(format("Provider: {0}", factory));
+
+		try {
+			// Returns a list containing all available Terminal readers
+			List<CardTerminal> terminals = factory.terminals().list();
+
+			System.out.println(format("NFC Terminals available ({0}):", terminals.size()));
+
+			for (int i = 0; i < terminals.size(); i++) {
+				System.out.println(format("[{0}] {1}", i, terminals.get(i).getName()));
 			}
-			return cardTerminal;	
-			
+
+			CardTerminal terminal = terminals.get(0);
+
+			System.out.println(format("using the: {0}", terminal.getName()));
+
+			return terminal;
+		}
+		catch (CardException e) {
+			throw new TerminalReaderNotFoundException("No card readers available.");
+		}
 	}
 	
 }
