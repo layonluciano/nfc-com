@@ -1,4 +1,5 @@
 package lasse.nfccom;
+
 /**
  *
  * @author layonluciano
@@ -10,28 +11,28 @@ public class SmartCard {
 	/**
 	 * Card Unique ID
 	 */
-	String uid;
+	private String uid;
 	
 	/**
 	 * Answer To Reset(ATR) information about the card
 	 */
-	String atr;
-	
-	public SmartCard(String uid, String atr){
+	private String atr;
+
+	public SmartCard(String uid, String atr) {
 		this.uid = uid;
 		this.atr = atr;
-	}
-	
-	public SmartCard(){
-		
 	}
 	
 	public String getUid() {
 		return uid;
 	}
 	
-	public String getAtr(){
+	public String getAtr() {
 		return atr;
 	}
-	
+
+	@Override
+	public String toString() {
+		return "uid: " + uid;
+	}
 }
