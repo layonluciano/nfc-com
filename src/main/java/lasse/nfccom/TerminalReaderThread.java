@@ -9,33 +9,49 @@ public class TerminalReaderThread implements Runnable{
 	SmartCardHandler smartCardHandler;
 	SmartCardDataHolder smartCardDataHolder;
 	SmartCard card;
+	int qty;
 	volatile boolean running = true;
+	CardCallback cardCallback;
 	
-	public TerminalReaderThread() {
+	public TerminalReaderThread(CardCallback cardCalback) {
 		this.terminalHandler = new TerminalConnectionHandler();
 		this.cardTerminal = terminalHandler.getTerminalConnection();
 		this.smartCardHandler = new SmartCardHandler();
 		this.smartCardDataHolder = new SmartCardDataHolder();
 		this.card = null;
+		this.qty = 0;
+		this.cardCallback = cardCalback;
 	}
 	
+	public void setQty(int qty) {
+		this.qty = qty;
+	}
+
 	public void terminate(){
 		running = false;
 		System.out.println("End of reading.");
 	}
 	
 	public void run() {
-		while(running){
-			card = readCard();
-			smartCardDataHolder.setCard(card);
-		}
+		//if(qty == 0){
+			while(running){
+				card = readCard();
+				cardCallback.responseToUser(card);//smartCardDataHolder.setCard(card);
+			}
+		//}else{
+		//	for(int i=0;i<qty;i++){
+		//		card = readCard();
+		//		smartCardDataHolder.setCard(card);
+		//	}
+			
+		//}
 	}
 	
 	public SmartCardDataHolder getSmartCardDataHolder() {
 		return smartCardDataHolder;
 	}
 
-	public SmartCard readCard() throws TerminalReaderNotFoundException{
+	public SmartCard readCard(){
 		
 		SmartCard card = null;
 		
@@ -68,5 +84,6 @@ public class TerminalReaderThread implements Runnable{
 		}
 		return card;
 	}
+
 
 }

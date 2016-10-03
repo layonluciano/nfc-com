@@ -4,10 +4,11 @@ public class ReadingManager {
 	Thread thread;
 	TerminalReaderThread terminalReaderThread;
 	
-	public ReadingManager(){
-		this.terminalReaderThread = new TerminalReaderThread();
-		this.thread = new Thread(terminalReaderThread); 
+	public ReadingManager(CardCallback call){
+		this.terminalReaderThread = new TerminalReaderThread(call);
+		this.thread = new Thread(terminalReaderThread);
 	}
+	
 	
 	public void startReadingThread(){
 		thread.start();
@@ -15,6 +16,10 @@ public class ReadingManager {
 	
 	public void stopReadingThread(){
 		terminalReaderThread.terminate();
+	}
+	
+	public void setCardQuantity(int cardQty){
+		terminalReaderThread.setQty(cardQty);
 	}
 
 	public TerminalReaderThread getTerminalReaderThread() {
