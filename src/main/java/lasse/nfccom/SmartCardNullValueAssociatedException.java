@@ -1,5 +1,11 @@
 package lasse.nfccom;
-
+/**
+ * 
+ * @author layonluciano
+ * Exception class to handle Smart Card null values	
+ * 
+ * Created on 04/10/16.
+ */
 public class SmartCardNullValueAssociatedException extends Exception {
 	
 	/**

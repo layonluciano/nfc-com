@@ -8,32 +8,42 @@ public class TerminalReaderThread implements Runnable {
 	private CardTerminal cardTerminal;
 
 	private SmartCardHandler smartCardHandler;
+	
+	private byte[] cardDataByte;
 
-	private volatile boolean running = true;
+	//private volatile boolean running = true;
 
 	private CardCallback callback;
 	
-	public TerminalReaderThread(CardCallback callback) {
+	public TerminalReaderThread(CardCallback callback, byte[] command) {
 		TerminalConnectionHandler terminalHandler = new TerminalConnectionHandler();
 		this.cardTerminal = terminalHandler.getTerminalConnection();
 		this.smartCardHandler = new SmartCardHandler();
 		this.callback = callback;
+		this.cardDataByte = command;
 	}
 	
-	public void terminate() {
+	public TerminalReaderThread(byte[] command){
+		TerminalConnectionHandler terminalHandler = new TerminalConnectionHandler();
+		this.cardTerminal = terminalHandler.getTerminalConnection();
+		this.smartCardHandler = new SmartCardHandler();
+		this.cardDataByte = command;
+	}
+	
+	/*public void terminate() {
 		running = false;
 		System.out.println("End of reading.");
-	}
+	}*/
 	
 	public void run() {
 
-		while(running) {
+		while(true) {
 
 			try {
 				System.out.println("Waiting for Smart Cards....");
 				cardTerminal.waitForCardPresent(0);
 				System.out.println("Now reading Smart Card.....");
-				SmartCard card = smartCardHandler.getCardData(cardTerminal);
+				SmartCard card = smartCardHandler.getCardData(cardTerminal, cardDataByte);
 
 				if (card == null) {
 					throw new SmartCardNullValueAssociatedException(
@@ -41,13 +51,14 @@ public class TerminalReaderThread implements Runnable {
 				}
 
 				System.out.println("----------------------------------");
-				System.out.println("Card UID: " + card.getUid());
+				System.out.println("Card UID: " + card.getData());
 				System.out.println("----------------------------------");
 
 				cardTerminal.waitForCardAbsent(0);
 				System.out.println("Removed Smart card.....");
 
-				callback.responseToUser(card);
+				onReadCard(card);
+				
 			}
 			catch (CardException e) {
 				throw new RuntimeException(e);
@@ -64,6 +75,13 @@ public class TerminalReaderThread implements Runnable {
 				e.printStackTrace();
 			}
 		}
+	}
+
+	private void onReadCard(SmartCard card) {
+		if (callback != null) {
+			callback.responseToUser(card);
+		}
+		
 	}
 
 }

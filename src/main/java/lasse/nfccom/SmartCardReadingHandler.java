@@ -9,11 +9,6 @@ import java.util.concurrent.Executors;
 import javax.smartcardio.CardException;
 import javax.smartcardio.CardTerminal;
 
-import com.google.common.util.concurrent.FutureCallback;
-import com.google.common.util.concurrent.Futures;
-import com.google.common.util.concurrent.ListenableFuture;
-import com.google.common.util.concurrent.ListeningExecutorService;
-import com.google.common.util.concurrent.MoreExecutors;
 
 
 @Deprecated
@@ -34,13 +29,14 @@ public class SmartCardReadingHandler {
 		//this.cardList = new ArrayList<SmartCard>();
 	}
 	
-	public void doConcurrentReading(/*final String[] masterTagList*/){
+	/*
+	public void doConcurrentReading(final String[] masterTagList){
 	//Parte do Guava
 		ListeningExecutorService service = MoreExecutors.listeningDecorator(Executors.newSingleThreadExecutor());
 		ListenableFuture <SmartCard> future = service.submit(new Callable<SmartCard>() {	
 			public SmartCard call() throws TerminalReaderNotFoundException{
 				//for(int i=0;i<3;i++)
-				return readCard(/*masterTagList*/);
+				return readCard(masterTagList);
 			}
 		});
 		Futures.addCallback(future, new FutureCallback<SmartCard>() {
@@ -57,10 +53,11 @@ public class SmartCardReadingHandler {
 			
 		});
 	}
+	*/
 	
+	/*
 	
-	
-	public SmartCard readCard(/*String[] masterTagList*/) throws TerminalReaderNotFoundException{
+	public SmartCard readCard(String[] masterTagList) throws TerminalReaderNotFoundException{
 		
 		SmartCard smc = null;
 		boolean flag = false;
@@ -74,7 +71,7 @@ public class SmartCardReadingHandler {
 				if(smc == null){
 					throw new SmartCardNullValueAssociatedException("Smart Card has no value associated due to short time in the Terminal Reader");
 				}
-				/*for(String tag:masterTagList){
+				for(String tag:masterTagList){
 					if(smc.getUid().equals(tag)){
 						System.out.println("pegou uma MasterTag");
 						flag = true;
@@ -83,7 +80,7 @@ public class SmartCardReadingHandler {
 				}
 				if (flag){
 					break;
-				}*/
+				}
 				System.out.println("----------------------------------");
 				System.out.println("Card UID: " + smc.getUid());
 				System.out.println("----------------------------------");
@@ -108,7 +105,7 @@ public class SmartCardReadingHandler {
 		
 		return smc;
 	}
-
+	*/
 	//private void addCardToList(SmartCard smc) {
 	//	cardList.add(smc);
 	//	

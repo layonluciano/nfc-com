@@ -1,38 +1,29 @@
 package lasse.nfccom;
-
 /**
  *
  * @author layonluciano
  * This class is used to mapping Smart Cards
  *
+ * Created on 03/10/16.
  */
 public class SmartCard {
 	
 	/**
-	 * Card Unique ID
+	 * Generic card data
 	 */
-	private String uid;
-	
-	/**
-	 * Answer To Reset(ATR) information about the card
-	 */
-	private String atr;
+	private String data;
 
-	public SmartCard(String uid, String atr) {
-		this.uid = uid;
-		this.atr = atr;
-	}
-	
-	public String getUid() {
-		return uid;
-	}
-	
-	public String getAtr() {
-		return atr;
+	public String getData() {
+		return data;
 	}
 
-	@Override
-	public String toString() {
-		return "uid: " + uid;
+	public void setData(String data) {
+		this.data = data;
 	}
+
+	public SmartCard(String data) {
+		this.data = data;
+		
+	}
+	
 }

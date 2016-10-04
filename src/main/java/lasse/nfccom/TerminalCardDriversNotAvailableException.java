@@ -5,7 +5,12 @@ package lasse.nfccom;
  */
 public class TerminalCardDriversNotAvailableException extends RuntimeException {
 
-    public TerminalCardDriversNotAvailableException(String msg) {
-        super(msg);
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1113590278908460082L;
+
+	public TerminalCardDriversNotAvailableException(String message) {
+        super(message);
     }
 }
