@@ -1,8 +1,9 @@
 package lasse.nfccom;
+
 /**
- * 
- * @author layonluciano
  * This interface define a callback response
+ * 
+ * @author Layon Luciano
  * 
  * Created on 03/10/16.
  */

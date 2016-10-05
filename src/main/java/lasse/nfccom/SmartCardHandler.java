@@ -10,9 +10,9 @@ import javax.smartcardio.ResponseAPDU;
 import static lasse.nfccom.StringHelper.convertToString;
 
 /**
- * 
- * @author layonluciano
  * This class is used to manage commands to be sent to Smart Cards
+ * 
+ * @author Layon Luciano
  * 
  * Created on 03/10/16.
  */

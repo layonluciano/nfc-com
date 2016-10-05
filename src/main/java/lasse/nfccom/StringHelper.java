@@ -1,7 +1,11 @@
 package lasse.nfccom;
 
 /**
- * Created by anderson on 03/10/16.
+ * This class is used to converts objects to String
+ *
+ * @author Anderson Rodrigo Davi
+ * 
+ * Created on 03/10/16. 
  */
 public class StringHelper {
 

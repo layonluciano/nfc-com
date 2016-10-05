@@ -1,8 +1,9 @@
 package lasse.nfccom;
+
 /**
- *
- * @author layonluciano
  * This class is used to mapping Smart Cards
+ *
+ * @author Layon Luciano
  *
  * Created on 03/10/16.
  */

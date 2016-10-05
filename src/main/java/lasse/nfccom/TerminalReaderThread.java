@@ -3,6 +3,14 @@ package lasse.nfccom;
 import javax.smartcardio.CardException;
 import javax.smartcardio.CardTerminal;
 
+/**
+ * This class is used to create a Smart Card reading thread  
+ * 
+ * @author Layon Luciano
+ * 
+ * Created on 03/10/16.
+ */
+
 public class TerminalReaderThread implements Runnable {
 
 	private CardTerminal cardTerminal;
@@ -10,8 +18,6 @@ public class TerminalReaderThread implements Runnable {
 	private SmartCardHandler smartCardHandler;
 	
 	private byte[] cardDataByte;
-
-	//private volatile boolean running = true;
 
 	private CardCallback callback;
 	
@@ -29,11 +35,6 @@ public class TerminalReaderThread implements Runnable {
 		this.smartCardHandler = new SmartCardHandler();
 		this.cardDataByte = command;
 	}
-	
-	/*public void terminate() {
-		running = false;
-		System.out.println("End of reading.");
-	}*/
 	
 	public void run() {
 
@@ -76,7 +77,11 @@ public class TerminalReaderThread implements Runnable {
 			}
 		}
 	}
-
+	
+	/**
+	 * This method sends a Smart Card object as callback to a user
+	 * @param card Smart Card to be sent via callback
+	 */
 	private void onReadCard(SmartCard card) {
 		if (callback != null) {
 			callback.responseToUser(card);

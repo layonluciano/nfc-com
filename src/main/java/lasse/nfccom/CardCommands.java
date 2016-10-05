@@ -1,9 +1,10 @@
 package lasse.nfccom;
 
 /**
- * @author layonluciano
  * Command interface used to retrieve card information
- *
+ * 
+ * @author Layon Luciano
+ * 
  * Created on 03/10/16.
  */
 public interface CardCommands {

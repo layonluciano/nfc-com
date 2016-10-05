@@ -11,7 +11,9 @@ import static java.text.MessageFormat.format;
  * This class is used to manage connections to the Terminal Reader
  *
  * @author Anderson Rodrigo Davi
- * @author layonluciano
+ * @author Layon Luciano
+ * 
+ * Created on 03/10/16.
  */
 public class TerminalConnectionHandler {
 
@@ -34,7 +36,8 @@ public class TerminalConnectionHandler {
 	public CardTerminal getTerminalConnection() throws TerminalReaderNotFoundException {
 
 		if (NONE_TYPE.equals(factory.getType())) {
-			throw new TerminalCardDriversNotAvailableException("No drivers available. Check if de library libpcsclite.so.1 is loaded.");
+			throw new TerminalCardDriversNotAvailableException(
+					"No drivers available. Check if de library libpcsclite.so.1 is loaded.");
 		}
 
 		System.out.println(format("Provider: {0}", factory));
@@ -56,7 +59,8 @@ public class TerminalConnectionHandler {
 			return terminal;
 		}
 		catch (CardException e) {
-			throw new TerminalReaderNotFoundException("No card readers available.");
+			throw new TerminalReaderNotFoundException(
+					"No card readers available.");
 		}
 	}
 	
