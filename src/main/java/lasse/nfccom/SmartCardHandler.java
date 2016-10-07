@@ -18,10 +18,13 @@ import static lasse.nfccom.StringHelper.convertToString;
  */
 public class SmartCardHandler {
 	
-	private String cardData;
+	private String cardUID;
 	
+	/**
+	 * Class constructor
+	 */
 	public SmartCardHandler() {
-		this.cardData = null;
+		this.cardUID = null;
 	}
 
 	/**
@@ -46,9 +49,11 @@ public class SmartCardHandler {
 			//A response APDU as defined in ISO/IEC 7816-4.
 			ResponseAPDU responseAPDU = channel.transmit(commandAPDU);
 			
-			cardData = convertToString(responseAPDU.getData());
-
-			return new SmartCard(cardData);
+			cardUID = convertToString(responseAPDU.getData());
+			
+			System.out.println("RESPONSE CODE : "+ Integer.toHexString(responseAPDU.getSW1()) +" "+ Integer.toHexString(responseAPDU.getSW2()));
+			
+			return new SmartCard(cardUID);
 		}
 		catch(CardException e) {
 			throw new SmartCardNullValueAssociatedException(

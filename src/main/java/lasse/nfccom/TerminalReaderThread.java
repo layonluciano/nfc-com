@@ -1,5 +1,7 @@
 package lasse.nfccom;
 
+import java.util.concurrent.Callable;
+
 import javax.smartcardio.CardException;
 import javax.smartcardio.CardTerminal;
 
@@ -11,82 +13,85 @@ import javax.smartcardio.CardTerminal;
  * Created on 03/10/16.
  */
 
-public class TerminalReaderThread implements Runnable {
+public class TerminalReaderThread implements Callable<SmartCard> {
 
 	private CardTerminal cardTerminal;
 
 	private SmartCardHandler smartCardHandler;
 	
-	private byte[] cardDataByte;
+	private byte[] cardCommand;
 
-	private CardCallback callback;
+	private OnCardReadListener callback;
 	
-	public TerminalReaderThread(CardCallback callback, byte[] command) {
-		TerminalConnectionHandler terminalHandler = new TerminalConnectionHandler();
-		this.cardTerminal = terminalHandler.getTerminalConnection();
+	/**
+	 * Constructor with callback
+	 * 
+	 * @param callback 			Callback to be sent to user
+	 * @param command  			Command issued to the reader
+	 * @param smartCardReader 	SmartCardReader instance with a CardTerminal attached
+	 */
+	public TerminalReaderThread(OnCardReadListener callback, byte[] command, SmartCardReader smartCardReader) {
+		this.cardTerminal = smartCardReader.getCardTerminal();
 		this.smartCardHandler = new SmartCardHandler();
 		this.callback = callback;
-		this.cardDataByte = command;
+		this.cardCommand = command;
 	}
 	
-	public TerminalReaderThread(byte[] command){
-		TerminalConnectionHandler terminalHandler = new TerminalConnectionHandler();
-		this.cardTerminal = terminalHandler.getTerminalConnection();
+	/**
+	 * Constructor without callback
+	 * 
+	 * @param command			Callback to be sent to user
+	 * @param smartCardReader 	SmartCardReader instance with a CardTerminal attached
+	 */
+	public TerminalReaderThread(byte[] command,SmartCardReader smartCardReader){
+		this.cardTerminal = smartCardReader.getCardTerminal();
 		this.smartCardHandler = new SmartCardHandler();
-		this.cardDataByte = command;
+		this.cardCommand = command;
 	}
 	
-	public void run() {
+	
+	@Override
+	public SmartCard call() throws Exception{
 
 		while(true) {
 
 			try {
 				System.out.println("Waiting for Smart Cards....");
+				
 				cardTerminal.waitForCardPresent(0);
+				
 				System.out.println("Now reading Smart Card.....");
-				SmartCard card = smartCardHandler.getCardData(cardTerminal, cardDataByte);
+				
+				SmartCard card = smartCardHandler.getCardData(cardTerminal, cardCommand);
 
 				if (card == null) {
 					throw new SmartCardNullValueAssociatedException(
 							"Smart Card has no value associated due to short time in the Terminal Reader");
 				}
 
-				System.out.println("----------------------------------");
-				System.out.println("Card UID: " + card.getData());
-				System.out.println("----------------------------------");
-
 				cardTerminal.waitForCardAbsent(0);
-				System.out.println("Removed Smart card.....");
-
-				onReadCard(card);
+				
+				System.out.println("Smart card has been removed.....");
+				
+				//Returns either a Callback or a Smart Card 
+				if(callback != null){
+					callback.onCardRead(card);
+				}else{
+					return card;
+				}
 				
 			}
 			catch (CardException e) {
 				throw new RuntimeException(e);
 			}
-			catch (NullPointerException ex2) {
-				System.out.println("Error due to a " + ex2.getCause() + " value to CardTerminal object");
-				ex2.printStackTrace();
-			}
-			catch (InterruptedException ex3) {
-				System.out.println("Error, Main thread was interrupted.");
-				ex3.printStackTrace();
+			catch (NullPointerException e) {
+				System.out.println("Error due to a " + e.getCause() + " value to CardTerminal object");
+				e.printStackTrace();
 			}
 			catch (SmartCardNullValueAssociatedException e) {
 				e.printStackTrace();
 			}
 		}
-	}
-	
-	/**
-	 * This method sends a Smart Card object as callback to a user
-	 * @param card Smart Card to be sent via callback
-	 */
-	private void onReadCard(SmartCard card) {
-		if (callback != null) {
-			callback.responseToUser(card);
-		}
-		
 	}
 
 }

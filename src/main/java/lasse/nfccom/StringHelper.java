@@ -15,10 +15,13 @@ public class StringHelper {
      * @return String converted string
      */
     public static String convertToString(byte[] src) {
+    	
         String answer = "";
+        
         for (byte b : src) {
             answer = answer + String.format("%02X", b);
         }
+        
         return answer;
     }
 }

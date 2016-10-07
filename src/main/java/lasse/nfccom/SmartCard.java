@@ -9,22 +9,17 @@ package lasse.nfccom;
  */
 public class SmartCard {
 	
-	/**
-	 * Generic card data
-	 */
-	private String data;
-
-	public String getData() {
-		return data;
+	private String uid;
+	
+	
+	public SmartCard(String uid) {
+		this.uid = uid;
+	}
+	
+	public String getUID(){
+		return uid;
 	}
 
-	public void setData(String data) {
-		this.data = data;
-	}
-
-	public SmartCard(String data) {
-		this.data = data;
-		
-	}
+	
 	
 }

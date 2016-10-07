@@ -5,6 +5,8 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
+import javax.smartcardio.CardTerminal;
+
 /**
  * This class provides even blocking or non-blocking access to Smart Card data
  * 
@@ -14,7 +16,7 @@ import java.util.concurrent.Future;
  */
 public class SmartCardReader {
 	
-	private byte[] cardDataByte;
+	private CardTerminal cardTerminal;
 	
 	private Future<?> future;
 
@@ -22,42 +24,74 @@ public class SmartCardReader {
 	
 	private ExecutorService executorService = Executors.newSingleThreadExecutor();
 	
-	public SmartCardReader(byte[] command) {
-		this.cardDataByte = command; 
+	/**
+	 * Class constructor
+	 * @param cardTerminal CardTerminal instance
+	 */
+	public SmartCardReader(CardTerminal cardTerminal) {
+		this.cardTerminal = cardTerminal; 
 	}
+	
 	
 	/**
 	 * This blocking method is used to read smart cards synchronously.
-	 * @return Smart card instance
+	 * 
+	 * @param command Command issued to the reader					
+	 * @return SmartCard instance
+	 * @throws InterruptedException
 	 */
-	public SmartCard read() {
-		this.terminalReaderThread = new TerminalReaderThread(cardDataByte);
+	public SmartCard read(byte[] command) throws InterruptedException {
+		
+		this.terminalReaderThread = new TerminalReaderThread(command, this);
+		
 		future = executorService.submit(terminalReaderThread);
-		SmartCard sm = null;
+		
+		SmartCard smartCard = null;
+		
 		try {
-			sm = (SmartCard) future.get();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
+		
+			smartCard = (SmartCard) future.get();
+			
 		} catch (ExecutionException e) {
-			e.printStackTrace();
+			throw new TerminalReaderNotFoundException(
+					"Terminal Reader not found during program execution.");
 		}
-		return sm;
+		
+		return smartCard;
 	}
+	
 	
 	/**
 	 * This non-blocking method is used to read smart cards asynchronously with a Callback
-	 * @param callback callback parameter to handle events
+	 *  
+	 * @param command  Command issued to the reader
+	 * @param callback Callback parameter to handle events
 	 */
-	public void read(CardCallback callback) {
-		this.terminalReaderThread = new TerminalReaderThread(callback, cardDataByte);
+	public void read(byte[] command,OnCardReadListener callback) {
+		
+		this.terminalReaderThread = new TerminalReaderThread(callback, command, this);
+		
 		future = executorService.submit(terminalReaderThread);
 	}
+	
 	
 	/**
 	 * This method is used to stop the card reading thread
 	 */
 	public void stopReadingThread() {
+		
 		future.cancel(true);
 	}
+	
+	
+	/**
+	 * Method to get a CardTerminal instance
+	 * @return CardTerminal instance
+	 */
+	public CardTerminal getCardTerminal() {
+		return cardTerminal;
+	}
+	
+	
 
 }
