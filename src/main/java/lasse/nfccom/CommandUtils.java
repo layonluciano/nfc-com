@@ -12,6 +12,10 @@ public interface CommandUtils {
 
     byte[] getUIDCommand = new byte[] { (byte) 0xFF, (byte) 0xCA, (byte) 0x00,
             (byte) 0x00, (byte) 0x00 };
+    
+    byte[] readSectorCommand = new byte[] {(byte) 0xAA};
+    
+    byte[] writeSectorCommand = new byte[] {(byte) 0xBB};
 
     byte[] getSerialNumberCommand = new byte[] {(byte) 0xFF, (byte) 0xCA, (byte) 0x00,
             (byte) 0x00, (byte) 0x04 };
@@ -24,13 +28,16 @@ public interface CommandUtils {
 
     byte[] setBuzzerOffCommand = new byte[] { (byte) 0xFF, (byte) 0x00, (byte) 0x52,
             (byte) 0x00, (byte) 0x00 };
-
-    byte[] readBinaryBlockCommand = new byte[] { (byte) 0xFF, (byte) 0xB0, (byte) 0x00,
-            (byte) 0x04, (byte) 0x10 };
     
-    byte[] loadAuthenticationKeytoReaderCommand = new byte[] { (byte) 0xFF, (byte) 0x82, (byte) 0x00,
-            (byte) 0x00, (byte) 0x06, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF };
+    byte[] writeBinaryBlock = new byte[] { (byte) 0xFF, (byte) 0xD6, (byte) 0x00};
     
-    byte[] authenticationCommand = new byte[] { (byte) 0xFF, (byte) 0x86, (byte) 0x00,
-            (byte) 0x00, (byte) 0x05, (byte) 0x01, (byte) 0x00, (byte) 0x04, (byte) 0x60, (byte) 0x00 };
+    byte[] readBinaryBlock = new byte[] { (byte) 0xFF, (byte) 0xB0, (byte) 0x00};
+    
+    byte[] loadAuthenticationKeytoReader = new byte[] { (byte) 0xFF, (byte) 0x82, (byte) 0x00,
+            (byte) 0x00, (byte) 0x06};
+    
+    byte[] authenticationHeader = new byte[] { (byte) 0xFF, (byte) 0x86, (byte) 0x00,
+            (byte) 0x00, (byte) 0x05, (byte) 0x01, (byte) 0x00};
+    
+    byte[] authenticationTail = new byte[] {(byte) 0x60, (byte) 0x00 };
 }

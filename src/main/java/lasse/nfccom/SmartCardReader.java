@@ -74,6 +74,13 @@ public class SmartCardReader {
 		future = executorService.submit(terminalReaderThread);
 	}
 	
+	public void write(byte[] command,OnCardReadListener callback, int sector, String dataToWrite){
+		
+		this.terminalReaderThread = new TerminalReaderThread(callback, command, this,sector,dataToWrite);
+		
+		future = executorService.submit(terminalReaderThread);
+	}
+	
 	
 	/**
 	 * This method is used to stop the card reading thread

@@ -23,6 +23,10 @@ public class TerminalReaderThread implements Callable<SmartCard> {
 
 	private OnCardReadListener callback;
 	
+	private int sector;
+	
+	private String dataToWrite;
+	
 	/**
 	 * Constructor with callback
 	 * 
@@ -30,13 +34,21 @@ public class TerminalReaderThread implements Callable<SmartCard> {
 	 * @param command  			Command issued to the reader
 	 * @param smartCardReader 	SmartCardReader instance with a CardTerminal attached
 	 */
+	public TerminalReaderThread(OnCardReadListener callback, byte[] command, SmartCardReader smartCardReader, int sector, String dataToWrite) {
+		this.cardTerminal = smartCardReader.getCardTerminal();
+		this.smartCardHandler = new SmartCardHandler();
+		this.callback = callback;
+		this.cardCommand = command;
+		this.sector = sector;
+		this.dataToWrite = dataToWrite;
+	}
+	
 	public TerminalReaderThread(OnCardReadListener callback, byte[] command, SmartCardReader smartCardReader) {
 		this.cardTerminal = smartCardReader.getCardTerminal();
 		this.smartCardHandler = new SmartCardHandler();
 		this.callback = callback;
 		this.cardCommand = command;
 	}
-	
 	/**
 	 * Constructor without callback
 	 * 
@@ -62,7 +74,7 @@ public class TerminalReaderThread implements Callable<SmartCard> {
 				
 				System.out.println("Now reading Smart Card.....");
 				
-				SmartCard card = smartCardHandler.getCardData(cardTerminal, cardCommand);
+				SmartCard card = smartCardHandler.getCardData(cardTerminal, cardCommand , sector, dataToWrite);
 
 				if (card == null) {
 					throw new SmartCardNullValueAssociatedException(
