@@ -32,8 +32,31 @@ public class SmartCardHandler {
 		this.cardSectorData = null;
 	}
 	
+	public SmartCard getCardUID(CardTerminal cardTerminal) throws SmartCardNullValueAssociatedException{
+		
+		try {
+			//Connects using any available protocol
+			Card card = cardTerminal.connect("*");
+			
+			//A logical channel connection to a Smart Card.
+			CardChannel channel = card.getBasicChannel();
+			
+			CommandAPDU commandToGetUID = new CommandAPDU(CommandUtils.getUIDCommand);
+			
+			ResponseAPDU responseUID = channel.transmit(commandToGetUID);
+			
+			cardUID = convertToString(responseUID.getData());
+		}
+		catch(CardException e) {
+			throw new SmartCardNullValueAssociatedException(
+					"Terminal Read wasn't able to get a response from Smart Card. Null value associated");
+		}
+		return new SmartCard(cardUID);
+		
+	}
 	
-	public SmartCard getCardData(CardTerminal cardTerminal, int sector) throws InterruptedException, SmartCardNullValueAssociatedException{
+	
+	public SmartCard getCardData(CardTerminal cardTerminal, int sector, byte[] key) throws InterruptedException, SmartCardNullValueAssociatedException{
 
 		try {
 			//Connects using any available protocol
@@ -48,7 +71,7 @@ public class SmartCardHandler {
 			
 			cardUID = convertToString(responseUID.getData());
 			
-			cardSectorData = readSector(intToByteArray(sector),new byte[]{(byte) 0xFF,(byte) 0xFF,(byte) 0xFF,(byte) 0xFF,(byte) 0xFF,(byte) 0xFF}, intToByteArray(16), channel);
+			cardSectorData = readSector(intToByteArray(sector), key, intToByteArray(16), channel);
 			
 		}
 		catch(CardException e) {
@@ -68,7 +91,7 @@ public class SmartCardHandler {
 	 * @throws InterruptedException
 	 * @throws SmartCardNullValueAssociatedException  
 	 */
-	public SmartCard setCardData(CardTerminal cardTerminal, int sector, String dataToWrite) throws InterruptedException, SmartCardNullValueAssociatedException{
+	public SmartCard setCardData(CardTerminal cardTerminal, int sector, byte[] key, String dataToWrite) throws InterruptedException, SmartCardNullValueAssociatedException{
 
 		try {
 			//Connects using any available protocol
@@ -82,7 +105,6 @@ public class SmartCardHandler {
 			ResponseAPDU responseUID = channel.transmit(commandToGetUID);
 			
 			cardUID = convertToString(responseUID.getData());
-			
 				
 			int toFillSector = 16 - dataToWrite.length();
 				
@@ -95,16 +117,14 @@ public class SmartCardHandler {
 			String dataToWriteHex = asciiToHex(dataToWrite);
 			byte[] dataByteToWrite = hexStringToByteArray(dataToWriteHex);
 			byte[] data = concatenateByteArrays(dataByteToWrite, zeros);
-				
-						
-			writeSector(intToByteArray(sector),new byte[]{(byte) 0xFF,(byte) 0xFF,(byte) 0xFF,(byte) 0xFF,(byte) 0xFF,(byte) 0xFF}, intToByteArray(16),data, channel);
+							
+			writeSector(intToByteArray(sector), key, intToByteArray(16),data, channel);
 			
 		}
 		catch(CardException e) {
 			throw new SmartCardNullValueAssociatedException(
 					"Terminal Read wasn't able to get a response from Smart Card. Null value associated");
 		}
-		
 	
 		return new SmartCard(cardUID);
 			

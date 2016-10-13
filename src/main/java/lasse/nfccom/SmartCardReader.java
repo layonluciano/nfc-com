@@ -34,15 +34,42 @@ public class SmartCardReader {
 	
 	
 	/**
-	 * This blocking method is used to read smart cards synchronously.
+	 * This blocking method is used to read smart cards synchronously on default sector zero
 	 * 
-	 * @param command Command issued to the reader					
 	 * @return SmartCard instance
 	 * @throws InterruptedException
 	 */
-	public SmartCard read(int sector) throws InterruptedException {
+	public SmartCard read() throws InterruptedException {
 		
-		this.terminalReaderThread = new TerminalReaderThread(this, sector);
+		this.terminalReaderThread = new TerminalReaderThread(this);
+		
+		future = executorService.submit(terminalReaderThread);
+		
+		SmartCard smartCard = null;
+		
+		try {
+		
+			smartCard = (SmartCard) future.get();
+			
+		} catch (ExecutionException e) {
+			throw new TerminalReaderNotFoundException(
+					"Terminal Reader not found during program execution.");
+		}
+		
+		return smartCard;
+	}
+	
+
+	/**
+	 * This blocking method is used to read smart cards synchronously with a chosen sector
+	 * 
+	 * @param sector Sector to be authenticated
+	 * @return SmartCard instance
+	 * @throws InterruptedException
+	 */
+	public SmartCard read(int sector, byte[] key) throws InterruptedException {
+		
+		this.terminalReaderThread = new TerminalReaderThread(this, sector, key);
 		
 		future = executorService.submit(terminalReaderThread);
 		
@@ -62,21 +89,41 @@ public class SmartCardReader {
 	
 	
 	/**
-	 * This non-blocking method is used to read smart cards asynchronously with a Callback
+	 * This non-blocking method is used to read smart cards asynchronously with a Callback on a default sector zero
 	 *  
 	 * @param command  Command issued to the reader
 	 * @param callback Callback parameter to handle events
 	 */
-	public void read(OnCardReadListener callback, int sector) {
+	public void read(OnCardReadListener callback) {
 		
-		this.terminalReaderThread = new TerminalReaderThread(callback, this, sector);
+		this.terminalReaderThread = new TerminalReaderThread(callback, this);
 		
 		future = executorService.submit(terminalReaderThread);
 	}
 	
-	public void write(OnCardReadListener callback, int sector, String dataToWrite){
+	/**
+	 * This non-blocking method is used to read smart cards asynchronously with a Callback and chosen sector
+	 * 
+	 * @param callback 	Callback parameter to handle events
+	 * @param sector 	Sector to be authenticated
+	 */
+	public void read(OnCardReadListener callback, int sector, byte[] key) {
 		
-		this.terminalReaderThread = new TerminalReaderThread(callback, this, sector, dataToWrite);
+		this.terminalReaderThread = new TerminalReaderThread(callback, this, sector, key, null);
+		
+		future = executorService.submit(terminalReaderThread);
+	}
+	
+	/**
+	 * This non-blocking method is used to write 16 bytes data to a NFC 1k card
+	 * 
+	 * @param callback 		Callback parameter to handle events
+	 * @param sector 		Sector to be authenticated
+	 * @param dataToWrite 	16 bytes data to be written on a NFC card
+	 */
+	public void write(OnCardReadListener callback, int sector, byte[] key, String dataToWrite){
+		
+		this.terminalReaderThread = new TerminalReaderThread(callback, this, sector, key, dataToWrite);
 		
 		future = executorService.submit(terminalReaderThread);
 	}
