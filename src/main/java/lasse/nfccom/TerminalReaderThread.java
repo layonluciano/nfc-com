@@ -18,8 +18,6 @@ public class TerminalReaderThread implements Callable<SmartCard> {
 	private CardTerminal cardTerminal;
 
 	private SmartCardHandler smartCardHandler;
-	
-	private byte[] cardCommand;
 
 	private OnCardReadListener callback;
 	
@@ -34,20 +32,19 @@ public class TerminalReaderThread implements Callable<SmartCard> {
 	 * @param command  			Command issued to the reader
 	 * @param smartCardReader 	SmartCardReader instance with a CardTerminal attached
 	 */
-	public TerminalReaderThread(OnCardReadListener callback, byte[] command, SmartCardReader smartCardReader, int sector, String dataToWrite) {
+	public TerminalReaderThread(OnCardReadListener callback, SmartCardReader smartCardReader, int sector, String dataToWrite) {
 		this.cardTerminal = smartCardReader.getCardTerminal();
 		this.smartCardHandler = new SmartCardHandler();
 		this.callback = callback;
-		this.cardCommand = command;
 		this.sector = sector;
 		this.dataToWrite = dataToWrite;
 	}
 	
-	public TerminalReaderThread(OnCardReadListener callback, byte[] command, SmartCardReader smartCardReader) {
+	public TerminalReaderThread(OnCardReadListener callback, SmartCardReader smartCardReader, int sector) {
 		this.cardTerminal = smartCardReader.getCardTerminal();
 		this.smartCardHandler = new SmartCardHandler();
 		this.callback = callback;
-		this.cardCommand = command;
+		this.sector = sector;
 	}
 	/**
 	 * Constructor without callback
@@ -55,15 +52,16 @@ public class TerminalReaderThread implements Callable<SmartCard> {
 	 * @param command			Callback to be sent to user
 	 * @param smartCardReader 	SmartCardReader instance with a CardTerminal attached
 	 */
-	public TerminalReaderThread(byte[] command,SmartCardReader smartCardReader){
+	public TerminalReaderThread(SmartCardReader smartCardReader, int sector){
 		this.cardTerminal = smartCardReader.getCardTerminal();
 		this.smartCardHandler = new SmartCardHandler();
-		this.cardCommand = command;
+		this.sector = sector;
 	}
 	
 	
 	@Override
 	public SmartCard call() throws Exception{
+		SmartCard card;
 
 		while(true) {
 
@@ -74,7 +72,11 @@ public class TerminalReaderThread implements Callable<SmartCard> {
 				
 				System.out.println("Now reading Smart Card.....");
 				
-				SmartCard card = smartCardHandler.getCardData(cardTerminal, cardCommand , sector, dataToWrite);
+				if(dataToWrite == null){
+					card = smartCardHandler.getCardData(cardTerminal, sector);
+				}else{
+					card = smartCardHandler.setCardData(cardTerminal, sector, dataToWrite);
+				}
 
 				if (card == null) {
 					throw new SmartCardNullValueAssociatedException(

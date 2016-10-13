@@ -31,15 +31,9 @@ public class SmartCardHandler {
 		this.cardUID = null;
 		this.cardSectorData = null;
 	}
-
-	/**
-	 * This method is responsible to retrieve a UID regarding a Smart card 
-	 * @param cardTerminal 	an instance of the terminal reader
-	 * @return SmartCard 	the card read by the terminal reader
-	 * @throws InterruptedException
-	 * @throws SmartCardNullValueAssociatedException  
-	 */
-	public SmartCard getCardData(CardTerminal cardTerminal, byte[] command, int sector, String dataToWrite) throws InterruptedException, SmartCardNullValueAssociatedException{
+	
+	
+	public SmartCard getCardData(CardTerminal cardTerminal, int sector) throws InterruptedException, SmartCardNullValueAssociatedException{
 
 		try {
 			//Connects using any available protocol
@@ -54,58 +48,66 @@ public class SmartCardHandler {
 			
 			cardUID = convertToString(responseUID.getData());
 			
-			if(command.equals(CommandUtils.readSectorCommand)){
-				
-				cardSectorData = readSector(bigIntToByteArray(sector),new byte[]{(byte) 0xFF,(byte) 0xFF,(byte) 0xFF,(byte) 0xFF,(byte) 0xFF,(byte) 0xFF}, bigIntToByteArray(16), channel);
+			cardSectorData = readSector(intToByteArray(sector),new byte[]{(byte) 0xFF,(byte) 0xFF,(byte) 0xFF,(byte) 0xFF,(byte) 0xFF,(byte) 0xFF}, intToByteArray(16), channel);
 			
-			}else if(command.equals(CommandUtils.writeSectorCommand)){
-				
-				int toFillSector = 16 - dataToWrite.length();
-				
-				byte[] zeros = new byte[toFillSector];
-				
-				//used to create hexadecimal zeros to fill until data comming completes 16 bytes
-				for(int i=0;i<toFillSector;i++){
-					concatenateByteArrays(zeros, new byte[]{(byte) 0x00});
-				}
-				String dataToWriteHex = asciiToHex(dataToWrite);
-				byte[] dataByteToWrite = hexStringToByteArray(dataToWriteHex);
-				byte[] data = concatenateByteArrays(dataByteToWrite, zeros);
-				
-						
-				writeSector(bigIntToByteArray(sector),new byte[]{(byte) 0xFF,(byte) 0xFF,(byte) 0xFF,(byte) 0xFF,(byte) 0xFF,(byte) 0xFF}, bigIntToByteArray(16),data, channel);
-			}
-			/*
-			if(command.equals(CommandUtils.readSectorCommand)){
-				cardSectorData = readSector(bigIntToByteArray(2),new byte[]{(byte) 0xFF,(byte) 0xFF,(byte) 0xFF,(byte) 0xFF,(byte) 0xFF,(byte) 0xFF}, bigIntToByteArray(16), channel);
-			}else if(command.equals(CommandUtils.writeSectorCommand)){
-				writeSector(bigIntToByteArray(2),new byte[]{(byte) 0xFF,(byte) 0xFF,(byte) 0xFF,(byte) 0xFF,(byte) 0xFF,(byte) 0xFF}, bigIntToByteArray(16),
-						new byte[] { (byte) 0x6C, (byte) 0x61, (byte) 0x79, (byte) 0x6F, (byte) 0x6E, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00}, channel);
-			}
-			*/
-			
-			/*
-			//A command APDU following the structure defined in ISO/IEC 7816-4
-			///CommandAPDU commandAPDU = new CommandAPDU(command);
-			
-			//A response APDU as defined in ISO/IEC 7816-4.
-			///ResponseAPDU responseAPDU = channel.transmit(commandAPDU);
-			
-			///cardUID = convertToString(responseAPDU.getData());
-			
-			///System.out.println("RESPONSE CODE : "+ Integer.toHexString(responseAPDU.getSW1()) +" "+ Integer.toHexString(responseAPDU.getSW2()));
-			*/
 		}
 		catch(CardException e) {
 			throw new SmartCardNullValueAssociatedException(
 					"Terminal Read wasn't able to get a response from Smart Card. Null value associated");
 		}
 		
-		if(cardSectorData==null){
-			return new SmartCard(cardUID);
-		}else{
-			return new SmartCard(cardUID, cardSectorData);
-		}	
+		return new SmartCard(cardUID, cardSectorData);
+			
+	}
+	
+	
+	/**
+	 * This method is responsible to retrieve a UID regarding a Smart card 
+	 * @param cardTerminal 	an instance of the terminal reader
+	 * @return SmartCard 	the card read by the terminal reader
+	 * @throws InterruptedException
+	 * @throws SmartCardNullValueAssociatedException  
+	 */
+	public SmartCard setCardData(CardTerminal cardTerminal, int sector, String dataToWrite) throws InterruptedException, SmartCardNullValueAssociatedException{
+
+		try {
+			//Connects using any available protocol
+			Card card = cardTerminal.connect("*");
+			
+			//A logical channel connection to a Smart Card.
+			CardChannel channel = card.getBasicChannel();
+			
+			CommandAPDU commandToGetUID = new CommandAPDU(CommandUtils.getUIDCommand);
+			
+			ResponseAPDU responseUID = channel.transmit(commandToGetUID);
+			
+			cardUID = convertToString(responseUID.getData());
+			
+				
+			int toFillSector = 16 - dataToWrite.length();
+				
+			byte[] zeros = new byte[toFillSector];
+				
+			//used to create hexadecimal zeros to fill until data comming completes 16 bytes
+			for(int i=0;i<toFillSector;i++){
+				concatenateByteArrays(zeros, new byte[]{(byte) 0x00});
+			}
+			String dataToWriteHex = asciiToHex(dataToWrite);
+			byte[] dataByteToWrite = hexStringToByteArray(dataToWriteHex);
+			byte[] data = concatenateByteArrays(dataByteToWrite, zeros);
+				
+						
+			writeSector(intToByteArray(sector),new byte[]{(byte) 0xFF,(byte) 0xFF,(byte) 0xFF,(byte) 0xFF,(byte) 0xFF,(byte) 0xFF}, intToByteArray(16),data, channel);
+			
+		}
+		catch(CardException e) {
+			throw new SmartCardNullValueAssociatedException(
+					"Terminal Read wasn't able to get a response from Smart Card. Null value associated");
+		}
+		
+	
+		return new SmartCard(cardUID);
+			
 	}
 	
 
@@ -182,7 +184,7 @@ public class SmartCardHandler {
 	    return result;
 	} 
 	
-	private byte[] bigIntToByteArray( final int i ) {
+	private byte[] intToByteArray( final int i ) {
 	    BigInteger bigInt = BigInteger.valueOf(i);      
 	    return bigInt.toByteArray();
 	}

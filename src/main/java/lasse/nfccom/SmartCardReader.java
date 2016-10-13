@@ -40,9 +40,9 @@ public class SmartCardReader {
 	 * @return SmartCard instance
 	 * @throws InterruptedException
 	 */
-	public SmartCard read(byte[] command) throws InterruptedException {
+	public SmartCard read(int sector) throws InterruptedException {
 		
-		this.terminalReaderThread = new TerminalReaderThread(command, this);
+		this.terminalReaderThread = new TerminalReaderThread(this, sector);
 		
 		future = executorService.submit(terminalReaderThread);
 		
@@ -67,16 +67,16 @@ public class SmartCardReader {
 	 * @param command  Command issued to the reader
 	 * @param callback Callback parameter to handle events
 	 */
-	public void read(byte[] command,OnCardReadListener callback) {
+	public void read(OnCardReadListener callback, int sector) {
 		
-		this.terminalReaderThread = new TerminalReaderThread(callback, command, this);
+		this.terminalReaderThread = new TerminalReaderThread(callback, this, sector);
 		
 		future = executorService.submit(terminalReaderThread);
 	}
 	
-	public void write(byte[] command,OnCardReadListener callback, int sector, String dataToWrite){
+	public void write(OnCardReadListener callback, int sector, String dataToWrite){
 		
-		this.terminalReaderThread = new TerminalReaderThread(callback, command, this,sector,dataToWrite);
+		this.terminalReaderThread = new TerminalReaderThread(callback, this, sector, dataToWrite);
 		
 		future = executorService.submit(terminalReaderThread);
 	}

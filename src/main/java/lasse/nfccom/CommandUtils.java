@@ -7,15 +7,10 @@ package lasse.nfccom;
  * 
  * Created on 03/10/16.
  */
-//Renomear para outra coisa
 public interface CommandUtils {
 
     byte[] getUIDCommand = new byte[] { (byte) 0xFF, (byte) 0xCA, (byte) 0x00,
             (byte) 0x00, (byte) 0x00 };
-    
-    byte[] readSectorCommand = new byte[] {(byte) 0xAA};
-    
-    byte[] writeSectorCommand = new byte[] {(byte) 0xBB};
 
     byte[] getSerialNumberCommand = new byte[] {(byte) 0xFF, (byte) 0xCA, (byte) 0x00,
             (byte) 0x00, (byte) 0x04 };
