@@ -137,7 +137,6 @@ public class SmartCardReader {
 		future.cancel(true);
 	}
 	
-	
 	/**
 	 * Method to get a CardTerminal instance
 	 * @return CardTerminal instance

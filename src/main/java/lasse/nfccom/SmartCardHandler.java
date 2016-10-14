@@ -114,6 +114,7 @@ public class SmartCardHandler {
 			for(int i=0;i<toFillSector;i++){
 				concatenateByteArrays(zeros, new byte[]{(byte) 0x00});
 			}
+			
 			String dataToWriteHex = asciiToHex(dataToWrite);
 			byte[] dataByteToWrite = hexStringToByteArray(dataToWriteHex);
 			byte[] data = concatenateByteArrays(dataByteToWrite, zeros);
