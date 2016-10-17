@@ -131,7 +131,14 @@ public class SmartCardHandler {
 			
 	}
 	
-
+	/**
+	 * Method used to login into a card sector
+	 * 
+	 * @param sector		Sector to login
+	 * @param key			key used to login into sector
+	 * @param channel		Channel used in communication wit Card Reader
+	 * @throws SmartCardNullValueAssociatedException
+	 */
 	private void login(byte[] sector,byte[] key,CardChannel channel) throws SmartCardNullValueAssociatedException{
 		
 		byte[] keyToUse = concatenateByteArrays(CommandUtils.loadAuthenticationKeytoReader, key); 
