@@ -54,3 +54,5 @@ sudo service pcscd restart
 ``` 
 pcsc_scan 
 ```
+
+### Make sure to have java-7 installed 
