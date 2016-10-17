@@ -32,6 +32,13 @@ public class SmartCardHandler {
 		this.cardSectorData = null;
 	}
 	
+	/**
+	 * Method used to get card UID without authentication
+	 * 
+	 * @param cardTerminal		An instance of the terminal reader
+	 * @return 					SmartCard object
+	 * @throws SmartCardNullValueAssociatedException
+	 */
 	public SmartCard getCardUID(CardTerminal cardTerminal) throws SmartCardNullValueAssociatedException{
 		
 		try {
@@ -55,7 +62,16 @@ public class SmartCardHandler {
 		
 	}
 	
-	
+	/**
+	 * Method to retrieve card data from a spacific sector with proper authentication
+	 * 
+	 * @param cardTerminal			An instance of the terminal reader
+	 * @param sector				Sector to be authenticated
+	 * @param key					key used in sector authentication
+	 * @return						SmartCard object
+	 * @throws InterruptedException
+	 * @throws SmartCardNullValueAssociatedException
+	 */
 	public SmartCard getCardData(CardTerminal cardTerminal, int sector, byte[] key) throws InterruptedException, SmartCardNullValueAssociatedException{
 
 		try {
@@ -86,7 +102,7 @@ public class SmartCardHandler {
 	
 	/**
 	 * This method is responsible to retrieve a UID regarding a Smart card 
-	 * @param cardTerminal 	an instance of the terminal reader
+	 * @param cardTerminal 	An instance of the terminal reader
 	 * @return SmartCard 	the card read by the terminal reader
 	 * @throws InterruptedException
 	 * @throws SmartCardNullValueAssociatedException  
