@@ -32,7 +32,6 @@ public class SmartCardHandler {
 		this.cardSectorData = null;
 	}
 	
-	
 	/**
 	 * Method used to get card UID without authentication
 	 * 
