@@ -15,7 +15,7 @@ sudo apt-get update && sudo apt-get upgrade -y
 sudo apt-get install libccid pcscd libpcsclite-dev libpcsclite1 pcsc-tools 
 ```
 
-* Download the library [libusb](http://downloads.sourceforge.net/libusb/libusb-1.0.20.tar.bz2) to allow communication with usb devices
+* Download the library [libusb](http://downloads.sourceforge.net/libusb/libusb-1.0.20.tar.bz2) to allow communication with usb devices:
 
 * Unzip, and run: 
 ``` 
@@ -24,7 +24,7 @@ make
 make install
 ```
 
-* Download the library [acsccid](http://www.acs.com.hk/en/products/3/acr122u-usb-nfc-reader/) as ACR122U driver
+* Download the library [acsccid](http://www.acs.com.hk/en/products/3/acr122u-usb-nfc-reader/) as ACR122U driver:
 
 * Unzip, and run:
 ```
