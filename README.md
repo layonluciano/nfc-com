@@ -53,7 +53,7 @@ $ sudo service pcscd restart
 ``` 
 $ pcsc_scan 
 ```
-#### obs: Make sure to have java-7 installed 
+#### obs: Make sure to have Oracle java-7 installed 
 
 ## How to use:
 
