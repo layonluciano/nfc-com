@@ -1,5 +1,5 @@
 # nfc-com
-API used to communicate with Mifare 1K Classic NFC tags 
+Java API used to communicate with Mifare 1K Classic NFC tags.  
 
 ---
 
