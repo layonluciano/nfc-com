@@ -1,4 +1,4 @@
-package lasse.nfccom;
+package exceptions;
 
 /**
  * Exception class to handle Smart Card null values	

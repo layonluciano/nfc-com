@@ -1,4 +1,4 @@
-package lasse.nfccom;
+package services;
 
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
@@ -6,6 +6,10 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
 import javax.smartcardio.CardTerminal;
+
+import exceptions.TerminalReaderNotFoundException;
+import interfaces.OnCardReadListener;
+import models.SmartCard;
 
 /**
  * This class provides even blocking or non-blocking access to Smart Card data

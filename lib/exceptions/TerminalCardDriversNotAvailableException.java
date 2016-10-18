@@ -1,4 +1,4 @@
-package lasse.nfccom;
+package exceptions;
 
 /**
  * Exception class used to inform missing Terminal Reader drivers

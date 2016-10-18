@@ -1,4 +1,4 @@
-package lasse.nfccom;
+package helpers;
 
 /**
  * This class is used to converts objects to String

@@ -1,9 +1,13 @@
-package lasse.nfccom;
+package services;
 
 import java.util.concurrent.Callable;
 
 import javax.smartcardio.CardException;
 import javax.smartcardio.CardTerminal;
+
+import exceptions.SmartCardNullValueAssociatedException;
+import interfaces.OnCardReadListener;
+import models.SmartCard;
 
 /**
  * This class is used to create a Smart Card reading thread  
