@@ -1,5 +1,5 @@
 # nfc-com
-Java API used to communicate with Mifare 1K Classic NFC tags.  
+Java API used to communicate with Mifare 1K Classic NFC tags using the ACR122U NFC reader.  
 
 
 ## Run the following commands to add project dependencies: 
