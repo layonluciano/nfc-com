@@ -1,4 +1,4 @@
-package lasse.nfccom;
+package utils;
 
 /**
  * Command interface used to retrieve card information

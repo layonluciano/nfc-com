@@ -1,4 +1,6 @@
-package lasse.nfccom;
+package interfaces;
+
+import models.SmartCard;
 
 /**
  * This interface define a callback response

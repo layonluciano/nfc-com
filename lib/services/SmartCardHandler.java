@@ -1,4 +1,4 @@
-package lasse.nfccom;
+package services;
 
 import javax.smartcardio.Card;
 import javax.smartcardio.CardChannel;
@@ -7,7 +7,11 @@ import javax.smartcardio.CardTerminal;
 import javax.smartcardio.CommandAPDU;
 import javax.smartcardio.ResponseAPDU;
 
-import static lasse.nfccom.StringHelper.convertToString;
+import exceptions.SmartCardNullValueAssociatedException;
+import models.SmartCard;
+import utils.CommandUtils;
+
+import static helpers.StringHelper.convertToString;
 
 import java.math.BigInteger;
 

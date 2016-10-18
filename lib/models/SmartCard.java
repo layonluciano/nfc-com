@@ -1,4 +1,4 @@
-package lasse.nfccom;
+package models;
 
 /**
  * This class is used to mapping Smart Cards

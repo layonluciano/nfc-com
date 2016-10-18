@@ -1,8 +1,11 @@
-package lasse.nfccom;
+package services;
 
 import javax.smartcardio.CardException;
 import javax.smartcardio.CardTerminal;
 import javax.smartcardio.TerminalFactory;
+
+import exceptions.TerminalCardDriversNotAvailableException;
+import exceptions.TerminalReaderNotFoundException;
 
 import java.util.ArrayList;
 import java.util.List;
