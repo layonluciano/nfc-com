@@ -43,10 +43,8 @@ public class SmartCardHandler {
 	public SmartCard getCardUID(CardTerminal cardTerminal) throws SmartCardNullValueAssociatedException{
 		
 		try {
-			//Connects using any available protocol
 			Card card = cardTerminal.connect("*");
 			
-			//A logical channel connection to a Smart Card.
 			CardChannel channel = card.getBasicChannel();
 			
 			CommandAPDU commandToGetUID = new CommandAPDU(CommandUtils.getUIDCommand);
@@ -76,10 +74,8 @@ public class SmartCardHandler {
 	public SmartCard getCardData(CardTerminal cardTerminal, int sector, byte[] key) throws InterruptedException, SmartCardNullValueAssociatedException{
 
 		try {
-			//Connects using any available protocol
 			Card card = cardTerminal.connect("*");
 			
-			//A logical channel connection to a Smart Card.
 			CardChannel channel = card.getBasicChannel();
 			
 			CommandAPDU commandToGetUID = new CommandAPDU(CommandUtils.getUIDCommand);
@@ -111,10 +107,8 @@ public class SmartCardHandler {
 	public SmartCard setCardData(CardTerminal cardTerminal, int sector, byte[] key, String dataToWrite) throws InterruptedException, SmartCardNullValueAssociatedException{
 
 		try {
-			//Connects using any available protocol
 			Card card = cardTerminal.connect("*");
 			
-			//A logical channel connection to a Smart Card.
 			CardChannel channel = card.getBasicChannel();
 			
 			CommandAPDU commandToGetUID = new CommandAPDU(CommandUtils.getUIDCommand);
@@ -180,6 +174,16 @@ public class SmartCardHandler {
 		}
 	}
 	
+	/**
+	 * Method used to read data from a specific smart card sector 
+	 * 
+	 * @param sector		Sector to read
+	 * @param key			Key used to login into sector
+	 * @param bytesToRead	Number of bytes to be read. Up to 16 bytes
+	 * @param channel		Channel used in communication wit Card Reader
+	 * @return				String containing data from that sector.
+	 * @throws SmartCardNullValueAssociatedException
+	 */
 	private String readSector(byte[] sector ,byte[] key, byte[] bytesToRead, CardChannel channel) throws SmartCardNullValueAssociatedException{
 		
 		login(sector,key,channel);
@@ -202,6 +206,16 @@ public class SmartCardHandler {
 		return sectorData;
 	}
 	
+	/**
+	 * This method is used to write data in a specific sector of a smart card
+	 * 
+	 * @param sector			Sector to write
+	 * @param key				Key used to login into sector
+	 * @param bytesToUpdate		Number of bytes to update. Up to 16 bytes
+	 * @param data				Data to be written
+	 * @param channel			Channel used in communication wit Card Reader
+	 * @throws SmartCardNullValueAssociatedException
+	 */
 	private void writeSector(byte[] sector ,byte[] key, byte[] bytesToUpdate, byte[] data, CardChannel channel) throws SmartCardNullValueAssociatedException{
 		
 		login(sector,key,channel);
@@ -221,7 +235,13 @@ public class SmartCardHandler {
 		}
 	}
 	
-	
+	/**
+	 * Method used to concatenate two byte arrays into one.
+	 * 
+	 * @param a		First byte array 
+	 * @param b		Second byte array 
+	 * @return		Concatenated byte array 
+	 */
 	private byte[] concatenateByteArrays(byte[] a, byte[] b) {
 	    byte[] result = new byte[a.length + b.length]; 
 	    System.arraycopy(a, 0, result, 0, a.length); 
@@ -229,11 +249,23 @@ public class SmartCardHandler {
 	    return result;
 	} 
 	
+	/**
+	 * Method to turn int numbers into a byte array
+	 * 
+	 * @param i		Entry number 
+	 * @return		Byte array 
+	 */
 	private byte[] intToByteArray( final int i ) {
 	    BigInteger bigInt = BigInteger.valueOf(i);      
 	    return bigInt.toByteArray();
 	}
 	
+	/**
+	 * Method used to convert ASCII into Hexadecimal representation
+	 * 	
+	 * @param asciiValue	Input ASCII string
+	 * @return				String as a Hexadecimal representation
+	 */
 	private static String asciiToHex(String asciiValue)
 	{
 	    char[] chars = asciiValue.toCharArray();
@@ -245,6 +277,12 @@ public class SmartCardHandler {
 	    return hex.toString();
 	}
 	
+	/**
+	 * Method used to convert Hexadecimal strings representations 
+	 * 
+	 * @param s				Input Hexadecimal string representation
+	 * @return				Byte array with Hexadecimal notation
+	 */
 	public static byte[] hexStringToByteArray(String s) {
 	    int len = s.length();
 	    byte[] data = new byte[len / 2];
