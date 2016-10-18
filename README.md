@@ -75,7 +75,7 @@ $ pcsc_scan
 	}
 ```
 
-### Reading a card using block authentication:
+### Reading a card using authentication on a specific block:
 ```Java
     public static void main(String[] args) throws TerminalReaderNotFoundException, InterruptedException{
 		SmartCardReaderService cardService = new SmartCardReaderService();
@@ -94,7 +94,7 @@ $ pcsc_scan
 	}
 ```
 
-### Writing on a card using block authentication:
+### Writing on a card using authentication on a specific block:
 ```Java
     public static void main(String[] args) throws TerminalReaderNotFoundException, InterruptedException{
 		SmartCardReaderService cardService = new SmartCardReaderService();
@@ -112,3 +112,8 @@ $ pcsc_scan
 		
 	}
 ```
+
+---
+
+Additional documentation can be found on [ACR122U Application Programming Interface](www.acs.com.hk/download-manual/419/API-ACR122U-2.03.pdf)
+
