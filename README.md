@@ -99,6 +99,7 @@ $ pcsc_scan
     public static void main(String[] args) throws TerminalReaderNotFoundException, InterruptedException{
 		SmartCardReaderService cardService = new SmartCardReaderService();
 		byte[] key = new byte[]{(byte) 0xFF,(byte) 0xFF,(byte) 0xFF,(byte) 0xFF,(byte) 0xFF,(byte) 0xFF};
+		String data = "Upto16Characters";
 		
 		SmartCardReader reader = cardService.getOne();
     
@@ -108,7 +109,7 @@ $ pcsc_scan
 			public void onCardRead(SmartCard card) {
 				//SmartCard object containing just UID
 			}
-		}, 2, key, "Upto16Characters");
+		}, 2, key, data);
 		
 	}
 ```
