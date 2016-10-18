@@ -1,7 +1,6 @@
 # nfc-com
 Java API used to communicate with Mifare 1K Classic NFC tags.  
 
----
 
 ## Run the following commands to add project dependencies: 
 
