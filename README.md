@@ -90,7 +90,7 @@ $ pcsc_scan
 			public void onCardRead(SmartCard card) {
 				//SmartCard object containing UID and sector data
 			}
-		},2,key);
+		}, 2, key);
 		
 	}
 ```
