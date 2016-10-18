@@ -115,5 +115,5 @@ $ pcsc_scan
 
 ---
 
-Additional documentation can be found on [ACR122U Application Programming Interface](http://www.acs.com.hk/en/products/3/acr122u-usb-nfc-reader/)
+Additional documentation can be found on [ACR122U Application Programming Interface](http://www.acs.com.hk/en/products/3/acr122u-usb-nfc-reader/) on the Downloads section.
 
