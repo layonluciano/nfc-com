@@ -53,7 +53,7 @@ $ sudo service pcscd restart
 ``` 
 $ pcsc_scan 
 ```
-#### obs: Make sure to have Oracle java-7 installed 
+#### obs: Make sure to have Oracle java-7 installed and build the project with Maven.
 
 ## How to use:
 
